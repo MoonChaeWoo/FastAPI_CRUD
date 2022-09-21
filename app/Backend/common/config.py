@@ -15,12 +15,22 @@ templates = path.join(frontent, 'templates')
 # LocalConfig와 ServerConfig의 베이스 클래스
 # dataclass 어노테이션은 해당 클래스를 Dict 형태로 추출해서 사용을 위함.
 # print(asdict(LocalConfig()))하면 dict형태로 출력
+
 @dataclass
 class Config:
 
     BASE_DIR = base_dir
     STATIC = static
     TEMPLATES = templates
+    
+# Timeout 최대값
+# template.yaml 파일에서 Timeout 값을 3600 으로 수정한 후, 배포 명령어 실행함.
+
+# [오류 원인]
+# Timeout의 최대값은 900
+
+#[해결 방법]
+#Timeout 값을 3600 → 900 으로 수정
 
     DB_POOL_RECYCLE : int = 900
     DB_ECHO : bool = True
