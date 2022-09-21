@@ -9,14 +9,14 @@ from fastapi.templating import Jinja2Templates
 from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from Backend.database import SessionLocal, engin, crud, models, schemas
 
 def create_app():
     # 앱 생성
-    
-    
     app = FastAPI()
 
     # 데이터 베이스 이니셜라이즈
+    models.Base.metadata.create_all(bind=engin)
 
     # 레디스 이니셜라이즈
 
