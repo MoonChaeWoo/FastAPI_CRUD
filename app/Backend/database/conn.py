@@ -10,7 +10,7 @@ from os import environ
 from dotenv import load_dotenv
 import pandas as pd
 
-# .env 환경파일 로드
+# .env 환경파일 로드 
 load_dotenv()
 
 SQLALCHEMY_DATABASE_URL = '{}://{}:{}@{}:{}/{}'.format(

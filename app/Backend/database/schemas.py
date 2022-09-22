@@ -1,7 +1,7 @@
 # FastAPI에는 Schema라는 개념이 존재한다
 # 스프링이나 nestJS로 개발을 해봤던 사람이라면 DTO라는 이름이 더 익숙할 것
 # DTO란 Data Transfer Object의 약자로서 어떤 메소드나 클래스간 객체정보를 주고 받을 때 특정 모양으로 주고 받겠다는 일종의 약속
-# FastAPI의 스키마는 pydantic model에 종속돼있다.
+# FastAPI의 스키마는 pydantic model에 종속돼있다. 
 
 from typing import List, Optional
 from pydantic import BaseModel

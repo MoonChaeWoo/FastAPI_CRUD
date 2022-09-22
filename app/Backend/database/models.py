@@ -4,7 +4,7 @@
 
 # Pydantic 모델: 은 새로운 유형 주석 구문/유형 힌트 를 사용하여 유형을 선언합니다 .
 # ex) name: str
-# =이 점을 염두에 두어 사용 시 혼동되지 않는다.
+# =이 점을 염두에 두어 사용 시 혼동되지 않는다. 
 
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
