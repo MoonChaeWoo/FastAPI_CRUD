@@ -5,14 +5,15 @@
 from sqlalchemy.orm import Session
 from . import models, schemas
 
+# 유저 한명 가져오기 
 def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
 
-
+# 유저 이메일 가져오기
 def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
 
-
+# 유저 전체 가져오기
 def get_users(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.User).offset(skip).limit(limit).all()
     
@@ -30,7 +31,7 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.refresh(db_user)
     return db_user
 
-
+# item 전체 가져오기
 def get_items(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Item).offset(skip).limit(limit).all()
 

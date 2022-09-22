@@ -6,18 +6,26 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from os import environ
+from dotenv import load_dotenv
 import pandas as pd
 
-db_user = "postgres"
-db_password = "1q2w3e4r!"
-db_host = "127.0.0.1"
-db_port = "31115"
-db_database = "HN-Disaster"
+# .env 환경파일 로드 
+load_dotenv()
 
-SQLALCHEMY_DATABASE_URL = f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"
+SQLALCHEMY_DATABASE_URL = '{}://{}:{}@{}:{}/{}'.format(
+    environ['DB_TYPE'],
+    environ['DB_USER'],
+    environ['DB_PASSWD'],
+    environ['DB_HOST'],
+    environ['DB_PORT'],
+    environ['DB_NAME'],
+)
+
+# SQLALCHEMY_DATABASE_URL2 = f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"
 # SQLALCHEMY_DATABASE_URL 데이터 원본 이름 : 데이터베이스에 대한 연결을 설정하도록 함
 
-engin = create_engine(SQLALCHEMY_DATABASE_URL, echo = True, encoding='utf-8', pool_recycle=900)
+engin = create_engine(SQLALCHEMY_DATABASE_URL, echo = True, encoding='utf-8', pool_pre_ping=True)
 # 위 명령이 DB에 바로 연결시키는건 아니고, 이제 메모리에 인식 시키는 상황이다.
 # echo를 true로 설정하면 command창에 실행된 sql문이 뜨게 됨
 # engin변수는 sqlalchemy engine을 만드는것이며 나중에 main.py 폴더에서 사용할 예정
@@ -38,23 +46,23 @@ Base = declarative_base()
 
 
 
-# 테이블 이름 변수
-table_names = engin.table_names()
+# # 테이블 이름 변수
+# table_names = engin.table_names()
 
-# 테이블 이름 변수 출력
-print(table_names)
+# # 테이블 이름 변수 출력
+# print(table_names)
 
-# DB와의 연결
-con = engin.connect()
+# # DB와의 연결
+# con = engin.connect()
 
-# Query의 실행
-rs = con.execute("SELECT * FROM board")
+# # Query의 실행
+# rs = con.execute("SELECT * FROM board")
 
-# df에 Query의 결과를 저장
-df = pd.DataFrame(rs.fetchall())
+# # df에 Query의 결과를 저장
+# df = pd.DataFrame(rs.fetchall())
 
-# DB 끊기
-con.close()
+# # DB 끊기
+# con.close()
 
-# DataFrame head 출력
-print(df.head())
+# # DataFrame head 출력
+# print(df.head())

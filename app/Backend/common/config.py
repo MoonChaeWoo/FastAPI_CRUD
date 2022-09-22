@@ -14,7 +14,7 @@ templates = path.join(frontent, 'templates')
 
 # LocalConfig와 ServerConfig의 베이스 클래스
 # dataclass 어노테이션은 해당 클래스를 Dict 형태로 추출해서 사용을 위함.
-# print(asdict(LocalConfig()))하면 dict형태로 출력
+# print(asdict(LocalConfig()))하면 dict형태로 출력 
 
 @dataclass
 class Config:
