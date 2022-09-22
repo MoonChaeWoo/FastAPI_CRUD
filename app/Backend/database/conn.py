@@ -8,7 +8,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from os import environ
 from dotenv import load_dotenv
-import pandas as pd
+# import pandas as pd
 
 # .env 환경파일 로드 
 load_dotenv()
