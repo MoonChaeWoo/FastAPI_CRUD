@@ -6,15 +6,23 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from os import environ
+from dotenv import load_dotenv
 import pandas as pd
 
-db_user = "postgres"
-db_password = "1q2w3e4r!"
-db_host = "127.0.0.1"
-db_port = "31115"
-db_database = "HN-Disaster"
+# .env 환경파일 로드
+load_dotenv()
 
-SQLALCHEMY_DATABASE_URL = f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"
+SQLALCHEMY_DATABASE_URL = '{}://{}:{}@{}:{}/{}'.format(
+    environ['DB_TYPE'],
+    environ['DB_USER'],
+    environ['DB_PASSWD'],
+    environ['DB_HOST'],
+    environ['DB_PORT'],
+    environ['DB_NAME'],
+)
+
+# SQLALCHEMY_DATABASE_URL2 = f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"
 # SQLALCHEMY_DATABASE_URL 데이터 원본 이름 : 데이터베이스에 대한 연결을 설정하도록 함
 
 engin = create_engine(SQLALCHEMY_DATABASE_URL, echo = True, encoding='utf-8', pool_recycle=900)
