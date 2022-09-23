@@ -15,7 +15,7 @@ def index(request : Request):
     context = {
         'request' : request,
     }
-    return board.TemplateResponse('index.html', context)
+    return board.TemplateResponse('board_main.html', context)
 
 @router.get("/board/about", response_class=HTMLResponse)
 # request : Request를 받아야 html 호출 가능
