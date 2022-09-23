@@ -3,7 +3,7 @@
 # 가져오기 models(SQLAlchemy 모델) 및 schemas(Pydantic 모델 /스키마).
 
 from sqlalchemy.orm import Session
-from . import models, schemas
+from .. import models, schemas
 
 # 유저 한명 가져오기 
 def get_user(db: Session, user_id: int):
@@ -12,12 +12,8 @@ def get_user(db: Session, user_id: int):
 # 유저 이메일 가져오기
 def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
-
-# 유저 전체 가져오기
-def get_users(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.User).offset(skip).limit(limit).all()
     
-# 데이터 생성
+# 데이터 생성 (Create)
 def create_user(db: Session, user: schemas.UserCreate):
     fake_hashed_password = user.password + "notreallyhashed"
 
@@ -31,14 +27,20 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.refresh(db_user)
     return db_user
 
-# item 전체 가져오기
-def get_items(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Item).offset(skip).limit(limit).all()
+# 유저 전체 가져오기 (Read)
+def get_users(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.User).offset(skip).limit(limit).all()
 
-# 데이터 생성
-def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
-    db_item = models.Item(**item.dict(), owner_id=user_id)
-    db.add(db_item)
+# 유저 정보 업데이트 (Udate)
+def update_user(db: Session, user: schemas.userUpdate):
+    update_email = user.email
+    update_password = user.password
+
+    db.query(models.User).filter(models.User.id == user.id).update({"email" : update_email, "hashed_password" : update_password})
     db.commit()
-    db.refresh(db_item)
-    return db_item
+    return db.query(models.User).filter(models.User.id == user.id).first()
+
+# 유저 정보 삭제하기 (Delete)
+def delete_users(db: Session, user_id: int):
+    db.query(models.User).filter(models.User.id == user_id).delete()
+    db.commit()

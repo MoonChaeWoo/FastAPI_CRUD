@@ -14,9 +14,10 @@ class Config:
     # path.dirname : 현재 파일을 갖고 있는 디렉터리의 명까지만 가져옴
     # print(base_dir) 최상위 디렉터리
     BASE_DIR = path.dirname(path.dirname(path.dirname(path.abspath(__file__))))
-    FRONTEND = path.join(base_dir, 'Frontend')
+    FRONTEND = path.join(BASE_DIR, 'Frontend')
     STATIC = path.join(FRONTEND, 'static')
     TEMPLATES = path.join(FRONTEND, 'templates')
+    BOARD = path.join(TEMPLATES, 'board')
     
 # Timeout 최대값
 # template.yaml 파일에서 Timeout 값을 3600 으로 수정한 후, 배포 명령어 실행함.
