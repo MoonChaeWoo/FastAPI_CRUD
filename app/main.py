@@ -23,6 +23,15 @@ def create_app():
     # 레디스 이니셜라이즈
 
     # 미들웨어 정의
+    # request는 실제 request로 API로 보내진 정보를 담고있다.
+    # call_next는 함수 파라메터로, API 리퀘스트를 API에 해당되는 path에 보내고, response를 리턴하는 역할을 하는 파라메터이다.
+    @app.middleware("http")
+    async def add_process_time_header(request: Request, call_next):
+        start_time = time.time()
+        response = await call_next(request)
+        process_time = time.time() - start_time
+        response.headers["X-Process-Time"] = str(process_time)
+        return response
 
     # 라우터 정의
     app.include_router(board.router)
