@@ -9,6 +9,7 @@ from fastapi.staticfiles import StaticFiles
 from Backend.database import models
 from Backend.database.conn import engin
 from Backend.router import board, items, users
+import time
 
 def create_app():
     # 앱 생성

@@ -2,6 +2,10 @@ import requests
 import base64
 from os import environ
 from dotenv import load_dotenv
+from fastapi.encoders import jsonable_encoder
+from xml.etree.ElementTree import parse
+
+
 
 # .env 환경파일 로드 
 load_dotenv()
@@ -12,7 +16,7 @@ serviceKey = environ['SERVICEKEY']
 decode_key = requests.utils.unquote(serviceKey)
 
 url = 'http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth'
-params ={'serviceKey' : decode_key, 'returnType' : 'xml', 'numOfRows' : '100', 'pageNo' : '1', 'searchDate' : '2022-09-24', 'InformCode' : 'PM10' }
+params ={'serviceKey' : decode_key, 'returnType' : 'XML', 'numOfRows' : '100', 'pageNo' : '1', 'searchDate' : '2022-09-24', 'InformCode' : 'PM10' }
 
 # requests 라이브러리는 매우 직관적인 API를 제공한다.
 # 어떤 방식(method)의 HTTP 요청을 하느냐에 따라서 해당하는 이름의 함수를 사용하면 된다.
@@ -27,7 +31,35 @@ params ={'serviceKey' : decode_key, 'returnType' : 'xml', 'numOfRows' : '100', '
 response = requests.get(url, params=params)
 # print(response.status_code) # result 200
 # print(response.content)
-print(response.content.decode('utf8'))
+# print(response.content.decode('utf8'))
+
+# 먼저 디코딩을 해줌
+items = response.content.decode('utf8')
+
+tree = parse(items)
+root = tree.getroot()
+# 위와 같이 2줄로 하는 방법이 있으며
+# root = ET.fromstring(items)
+
+print(root)
+
+
+
+
+#dict_type = xmltodict.parse(items)
+
+# print(dict_type)
+
+#json_type = json.dumps(dict_type)
+#dict2_type = json.loads(json_type)
+
+#print(dict2_type)
+
+#print('------------------------------')
+
+#print(dict2_type['dataTime'])
+
+
 
 # 응답은 3가지 형태로 올 수 있다.
 # 1. 첫 번째는 content 속성을 통해 바이너리 원문을 얻을 수 있습니다.

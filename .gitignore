@@ -1,7 +1,9 @@
 venv/
+app/__pycache__/main.cpython-310.pyc
+app/Backend/common/__pycache__/config.cpython-310.pyc
 app/Backend/database/__pycache__*
 app/__pycache__*
 app/Backend/common/__pycache__*
 app/Backend/router/__pycache__*
 app/Backend/database/crud/__pycache__*
-app/Backend/common/__pycache__/config.cpython-310.pyc
+
