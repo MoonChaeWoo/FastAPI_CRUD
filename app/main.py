@@ -10,6 +10,7 @@ from Backend.database import models
 from Backend.database.conn import engin
 from Backend.router import board, items, users
 import time
+from Backend.api.airInfo_test import json_list
 
 def create_app():
     # 앱 생성
@@ -45,6 +46,8 @@ app = create_app()
 
 config = conf()
 templates = Jinja2Templates(directory=config.TEMPLATES)
+dashboard = Jinja2Templates(directory=config.DASHBOARD)
+
 app.mount("/static", StaticFiles(directory=config.STATIC), name="static")
 
 @app.get("/", response_class=HTMLResponse)
@@ -56,6 +59,16 @@ def index(request : Request):
     }
     return templates.TemplateResponse('main.html', context)
 
+
+@app.get("/dashboard", response_class=HTMLResponse)
+def index(request : Request):
+    context = {
+        'request' : request,
+        'items' : json_list
+    }
+    print('----------------------')
+    print(json_list)
+    return dashboard.TemplateResponse('index.html', context)
 
 
 if __name__ =="__main__":

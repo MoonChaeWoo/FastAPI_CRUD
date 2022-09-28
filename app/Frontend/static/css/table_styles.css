@@ -1,0 +1,7 @@
+table { border-collapse: collapse; width: 100%;}
+tr { border-top: 1px solid black; border-bottom: 1px solid black; }
+tr:nth-child(odd) { background-color: #e6f1ff; }
+tr:nth-child(even) { background-color: #f0f7ff; }
+tr:hover { background-color: #ffc5c2; cursor: pointer; }
+td { text-align: center; }
+th { text-align: right; }
