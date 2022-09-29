@@ -18,7 +18,6 @@ def index(request : Request):
     return board.TemplateResponse('board_main.html', context)
 
 @router.get("/board/about", response_class=HTMLResponse)
-# request : Request를 받아야 html 호출 가능
 def index(request : Request):
     context = {
         'request' : request,
@@ -26,7 +25,6 @@ def index(request : Request):
     return board.TemplateResponse('about.html', context)
 
 @router.get("/board/contact", response_class=HTMLResponse)
-# request : Request를 받아야 html 호출 가능
 def index(request : Request):
     context = {
         'request' : request,
@@ -34,7 +32,6 @@ def index(request : Request):
     return board.TemplateResponse('contact.html', context)
 
 @router.get("/board/post", response_class=HTMLResponse)
-# request : Request를 받아야 html 호출 가능
 def index(request : Request):
     context = {
         'request' : request,

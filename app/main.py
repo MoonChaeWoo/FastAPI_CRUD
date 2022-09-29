@@ -8,9 +8,9 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from Backend.database import models
 from Backend.database.conn import engin
-from Backend.router import board, items, users
+from Backend.router import board, items, users, dashboard
 import time
-from Backend.api.airInfo_test import json_list
+from Backend.api.airInfo_json import json_list
 
 def create_app():
     # 앱 생성
@@ -39,6 +39,7 @@ def create_app():
     app.include_router(board.router)
     app.include_router(users.router)
     app.include_router(items.router)
+    app.include_router(dashboard.router)
 
     return app
 
@@ -46,7 +47,6 @@ app = create_app()
 
 config = conf()
 templates = Jinja2Templates(directory=config.TEMPLATES)
-dashboard = Jinja2Templates(directory=config.DASHBOARD)
 
 app.mount("/static", StaticFiles(directory=config.STATIC), name="static")
 
@@ -58,18 +58,6 @@ def index(request : Request):
         'request' : request,
     }
     return templates.TemplateResponse('main.html', context)
-
-
-@app.get("/dashboard", response_class=HTMLResponse)
-def index(request : Request):
-    context = {
-        'request' : request,
-        'items' : json_list
-    }
-    print('----------------------')
-    print(json_list)
-    return dashboard.TemplateResponse('index.html', context)
-
 
 if __name__ =="__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)
