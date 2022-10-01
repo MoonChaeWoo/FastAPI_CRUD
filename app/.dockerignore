@@ -2,3 +2,4 @@ __*
 .git*
 venv/
 README.md
+dockerfiles

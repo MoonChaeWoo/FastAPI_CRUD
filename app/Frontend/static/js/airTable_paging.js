@@ -53,7 +53,7 @@ function displayNum(idx){
     }else if(numberStart <= (numPerCount - 2)){
         pageNationLi.slice(0, numPerCount).show();
     }else{
-        pageNationLi(idx - 3, idx + 2).show();
+        pageNationLi.slice(idx - 3, idx + 2).show();
     }
 }
 

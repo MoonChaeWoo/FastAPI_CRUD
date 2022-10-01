@@ -18,7 +18,8 @@ response = requests.get(url, params=params)
 
 content = response.text
 
-json_data = json.loads(content)
+json_data = json.loads('content')
+
 json_items = json_data['response']['body']['items']
 
 json_list = []

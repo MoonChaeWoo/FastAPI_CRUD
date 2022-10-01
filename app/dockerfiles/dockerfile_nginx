@@ -1,0 +1,5 @@
+FROM nginx:latest
+LABEL email="tyche0529@naver.com"
+LABEL name="Moon Chae Woo"
+LABEL description="nginx_server for FastAPI Application of ChaeWoo"
+COPY [".", "/etc/nginx/conf.d"]

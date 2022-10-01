@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  database:
+    container_name: Postgres_service
+    image: postgres:11.17-bullseye
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    networks:
+      default_bridge:
+        ipv4_address: 172.26.0.2
+
+  server:
+    container_name: Nginx_service
+    restart: always
+    build:
+      context: ./dockerfiles
+      dockerfile: dockerfile_nginx
+    ports:
+      - 80:80
+    depends_on:
+    - app
+    networks:
+      default_bridge:
+        ipv4_address: 172.26.0.4
+
+  app:
+    container_name: FastAPI_service
+    restart: always
+    build: .
+    entrypoint: ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "--access-logfile", "./gunicorn-access.log"]
+    command: ["main:app", "--bind", "0.0.0.0:8000", "--workers", "4"]
+    depends_on:
+      - database
+    networks:
+      default_bridge:
+        ipv4_address: 172.26.0.3
+
+networks:
+  default_bridge:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.26.0.0/16
