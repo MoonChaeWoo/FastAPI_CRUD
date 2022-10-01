@@ -42,12 +42,17 @@ const config = {
     type: 'doughnut',
     data: data,
     options: {
-        maintainAspectRatio: false
-    }
+			maintainAspectRatio: false,
+		}
   };
 
 const myChart = new Chart(
     document.getElementById('raiderChart'),
+    config
+  );
+
+  const myChart2 = new Chart(
+    document.getElementById('raiderChart2'),
     config
   );
 
