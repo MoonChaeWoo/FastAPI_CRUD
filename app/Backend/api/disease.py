@@ -12,15 +12,17 @@ serviceKey = environ['SERVICEKEY']
 # 디코딩을 해주어야 한다.
 decode_key = requests.utils.unquote(serviceKey)
 
-url = 'http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getMinuDustFrcstDspth'
-params ={'serviceKey' : decode_key, 'returnType' : 'JSON', 'numOfRows' : '100', 'pageNo' : '1', 'searchDate' : '2022-09-29', 'InformCode' : 'PM10' }
+url = 'http://apis.data.go.kr/B550928/dissForecastInfoSvc/getDissForecastInfo'
+params ={'serviceKey' : decode_key, 'numOfRows' : '22', 'pageNo' : '1', 'type' : 'JSON', 'dissCd' : '4', 'znCd' : '46' }
 
 response = requests.get(url, params=params)
 
 # 'searchDate' : datetime.now().date() - timedelta(days=1) 하루 전 날짜
-
 content = response.text
 print(content)
+
+
+#print(response)
 print(response.url)
 # json_data = json.loads(content)
 # json_items = json_data['response']['body']['items']

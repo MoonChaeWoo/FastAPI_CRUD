@@ -27,10 +27,22 @@ def create_app():
     # call_next는 함수 파라메터로, API 리퀘스트를 API에 해당되는 path에 보내고, response를 리턴하는 역할을 하는 파라메터이다.
     @app.middleware("http")
     async def add_process_time_header(request: Request, call_next):
-        start_time = time.time()
-        response = await call_next(request)
-        process_time = time.time() - start_time
-        response.headers["X-Process-Time"] = str(process_time)
+        #start_time = time.time()
+        #response = await call_next(request)
+        #process_time = time.time() - start_time
+        #response.headers["X-Process-Time"] = str(process_time)
+        requestEndpoint = str(request.method) + " " + str(request.url.path)
+        print(f'requestEndpoint : {requestEndpoint}')
+
+        client = str(request.client.host) + " : " + str(request.client.port)
+        print(f'client : {client}')
+
+        # 미들 웨어에서는 body는 사용하면 안됨
+        # body = await request.body()
+
+        response : Response = await call_next(request)
+        print(f'response : {response}')
+
         return response
 
     # 라우터 정의
@@ -58,7 +70,7 @@ def index(request : Request):
     return templates.TemplateResponse('main.html', context)
 
 if __name__ =="__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
 
 # 번외 
 # startup이벤트
