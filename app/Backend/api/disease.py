@@ -30,5 +30,5 @@ try:
         json_list_disease.append(item)
 
 except:
-    json_list_disease = [0, 0, 0, 0]
+    json_list_disease = ['0', '0', '0', '0']
 #json_data = json.loads(response)

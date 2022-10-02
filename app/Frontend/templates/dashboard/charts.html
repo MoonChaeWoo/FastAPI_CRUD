@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block main %}
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Charts</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+            <li class="breadcrumb-item active">Charts</li>
+        </ol>
+        <table id="airTable" style="display: none;"><tbody data-air="{{items}}" data-dis="{{disease}}"></tbody></table>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-chart-area me-1"></i>
+                Area Chart Example
+            </div>
+            <div class="card-body"><canvas id="AirWeekChart" width="100%" height="30"></canvas></div>
+            <div class="card-footer small text-muted">데이터 갱신 주기 일 매 시간</div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-chart-bar me-1"></i>
+                        Line Chart Example
+                    </div>
+                    <div class="card-body"><canvas id="lineChart" width="100%" height="50"></canvas></div>
+                    <div class="card-footer small text-muted">데이터 갱신 주기 일 1회</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}         

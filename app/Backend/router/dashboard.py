@@ -27,3 +27,12 @@ def index(request : Request):
         'items' : json_list
     }
     return dashboard.TemplateResponse('tables.html', context)
+
+@router.get("/dashboard/charts", response_class=HTMLResponse)
+def index(request : Request):
+    context = {
+        'request' : request,
+        'items' : json_list,
+        'disease' : json_list_disease
+    }
+    return dashboard.TemplateResponse('charts.html', context)
