@@ -40,7 +40,7 @@ def create_app():
         # 미들 웨어에서는 body는 사용하면 안됨
         # body = await request.body()
 
-        response : Response = await call_next(request)
+        response = await call_next(request)
         print(f'response : {response}')
 
         return response

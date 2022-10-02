@@ -4,6 +4,7 @@ from fastapi.responses import HTMLResponse
 from fastapi import Request
 from Backend.common.config import conf
 from Backend.api.airInfo_json import json_list
+from Backend.api.disease import json_list_disease
 
 router = APIRouter()
 
@@ -14,7 +15,8 @@ dashboard = Jinja2Templates(directory=config.DASHBOARD)
 def index(request : Request):
     context = {
         'request' : request,
-        'items' : json_list
+        'items' : json_list,
+        'disease' : json_list_disease
     }
     return dashboard.TemplateResponse('index.html', context)
 

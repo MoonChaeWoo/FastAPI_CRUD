@@ -15,19 +15,20 @@ decode_key = requests.utils.unquote(serviceKey)
 url = 'http://apis.data.go.kr/B550928/dissForecastInfoSvc/getDissForecastInfo'
 params ={'serviceKey' : decode_key, 'numOfRows' : '22', 'pageNo' : '1', 'type' : 'JSON', 'dissCd' : '4', 'znCd' : '46' }
 
-response = requests.get(url, params=params)
+
 
 # 'searchDate' : datetime.now().date() - timedelta(days=1) 하루 전 날짜
-content = response.text
-print(content)
+#content = response.text
+#print(content)
+json_list_disease = []
 
+try:
+    response = requests.get(url, params=params).json()
+    json_items = response['response']['body']['items']
 
-#print(response)
-print(response.url)
-# json_data = json.loads(content)
-# json_items = json_data['response']['body']['items']
+    for item in json_items:
+        json_list_disease.append(item)
 
-# json_list = []
-
-# for item in json_items:
-#     json_list.append(item)
+except:
+    json_list_disease = [0, 0, 0, 0]
+#json_data = json.loads(response)
