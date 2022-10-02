@@ -14,13 +14,17 @@ decode_key = requests.utils.unquote(serviceKey)
 url = 'http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty'
 params ={'serviceKey' : decode_key, 'returnType' : 'JSON', 'numOfRows' : '100', 'pageNo' : '1', 'sidoName' : '전남', "ver" : '1.1'}
 
-response = requests.get(url, params=params)
+response = requests.get(url, params=params).json()
 
-content = response.text
+#content = response.text
 
-json_data = json.loads('content')
+#print(content)
 
-json_items = json_data['response']['body']['items']
+#print(response)
+
+#json_data = json.loads('content')
+
+json_items = response['response']['body']['items']
 
 json_list = []
 
