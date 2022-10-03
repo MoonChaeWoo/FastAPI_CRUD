@@ -47,24 +47,8 @@
                             <th style="text-align: center;">측정일시</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th style="text-align: center;">시도명</th>
-                            <th style="text-align: center;">측정소명</th>
-                            <th style="text-align: center;">아황산가스농도</th>
-                            <th style="text-align: center;">일산화탄소농도</th>
-                            <th style="text-align: center;">오존농도</th>
-                            <th style="text-align: center;">이산화질소농도</th>
-                            <th style="text-align: center;">미세먼지농도(PM10)</th>
-                            <th style="text-align: center;">미세먼지농도(PM25)</th>
-                            <th style="text-align: center;">일산화탄소지수</th>
-                            <th style="text-align: center;">오존지수</th>
-                            <th style="text-align: center;">통합대기환경지수</th>
-                            <th style="text-align: center;">통합대기환경수치</th>
-                            <th style="text-align: center;">측정일시</th>
-                        </tr>
-                    </tfoot>
                     <tbody data-air="{{items}}" data-dis="{{disease}}">
+                    {% if items != None %}
                         {% for item in items %}
                         <tr>
                             <td>{{item.sidoName}}</td>
@@ -82,6 +66,28 @@
                             <td>{{item.dataTime}}</td>
                         </tr>
                         {% endfor %}
+                    <tfoot>
+                        <tr>
+                            <th style="text-align: center;">시도명</th>
+                            <th style="text-align: center;">측정소명</th>
+                            <th style="text-align: center;">아황산가스농도</th>
+                            <th style="text-align: center;">일산화탄소농도</th>
+                            <th style="text-align: center;">오존농도</th>
+                            <th style="text-align: center;">이산화질소농도</th>
+                            <th style="text-align: center;">미세먼지농도(PM10)</th>
+                            <th style="text-align: center;">미세먼지농도(PM25)</th>
+                            <th style="text-align: center;">일산화탄소지수</th>
+                            <th style="text-align: center;">오존지수</th>
+                            <th style="text-align: center;">통합대기환경지수</th>
+                            <th style="text-align: center;">통합대기환경수치</th>
+                            <th style="text-align: center;">측정일시</th>
+                        </tr>
+                    </tfoot>
+                    {% else %}
+                        <tr>
+                            <td colspan="13"; style="font-size: 3rem;">API 데이터 없음</td>
+                        </tr>
+                    {% endif %}
                     </tbody>
                 </table>
                 <div class="pagination">

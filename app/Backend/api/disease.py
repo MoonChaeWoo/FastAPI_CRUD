@@ -30,5 +30,8 @@ try:
         json_list_disease.append(item)
 
 except:
-    json_list_disease = ['0', '0', '0', '0']
+    json_list_disease = None
+    #response = requests.get(url, params=params).text
+    #response = json.dumps(response)
+    #response = json.loads(response)
 #json_data = json.loads(response)

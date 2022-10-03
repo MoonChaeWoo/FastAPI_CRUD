@@ -47,29 +47,36 @@ let dis_value3;
 let dis_value4;
 
 let data_dis = $('#airTable tbody').data('dis');
-console.log(data_dis);
-data_dis = data_dis.replaceAll("\'","\"");
-data_dis = data_dis.replaceAll("None", "\"None\"");
-data_dis = JSON.parse(data_dis);
 
-data_dis.forEach((value) => {
-  if (value.lowrnkZnCd == 46710){
-    dis_value1 = value;
-  }
+chartData_dis = []
 
-  if (value.lowrnkZnCd == 46720){
-    dis_value2 = value;
-  }
+if(data_dis != 'None'){
+  data_dis = data_dis.replaceAll("\'","\"");
+  data_dis = data_dis.replaceAll("None", "\"None\"");
+  data_dis = JSON.parse(data_dis);
+  
+  data_dis.forEach((value) => {
+    if (value.lowrnkZnCd == 46710){
+      dis_value1 = value;
+    }
+  
+    if (value.lowrnkZnCd == 46720){
+      dis_value2 = value;
+    }
+  
+    if (value.lowrnkZnCd == 46730){
+      dis_value3 = value;
+    }
+  
+    if (value.lowrnkZnCd == 46790){
+      dis_value4 = value;
+    }
+  });
 
-  if (value.lowrnkZnCd == 46730){
-    dis_value3 = value;
-  }
-
-  if (value.lowrnkZnCd == 46790){
-    dis_value4 = value;
-    // value4.push(value.cnt);
-  }
-});
+  chartData_dis = [dis_value1.cnt, dis_value2.cnt, dis_value3.cnt, dis_value4.cnt]
+}else{
+  chartData_dis = [0, 0, 0, 0]
+}
 
 const data = {
   labels: [
@@ -93,7 +100,7 @@ const data = {
   }, {
     type: 'line',
     label: '천식예측진료건수',
-    data: [dis_value1.cnt, dis_value2.cnt, dis_value3.cnt, dis_value4.cnt],
+    data: chartData_dis,
     fill: false,
     borderColor: 'rgb(54, 162, 235)'
   }]
