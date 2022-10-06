@@ -14,6 +14,9 @@ class ItemBase(BaseModel):
 class ItemCreate(ItemBase):
     pass
 
+class ItemUpdate(ItemCreate):
+    id : int
+
 class Item(ItemBase):
     id : int
     owner_id : int

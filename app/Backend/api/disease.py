@@ -16,7 +16,8 @@ url = 'http://apis.data.go.kr/B550928/dissForecastInfoSvc/getDissForecastInfo'
 params ={'serviceKey' : decode_key, 'numOfRows' : '22', 'pageNo' : '1', 'type' : 'JSON', 'dissCd' : '4', 'znCd' : '46' }
 
 
-
+response = requests.get(url, params=params)
+print(response.content.decode('utf8'))
 # 'searchDate' : datetime.now().date() - timedelta(days=1) 하루 전 날짜
 #content = response.text
 #print(content)
@@ -27,6 +28,7 @@ try:
     json_items = response['response']['body']['items']
 
     for item in json_items:
+        # print(item)
         json_list_disease.append(item)
 
 except:
