@@ -12,7 +12,7 @@ services:
       - 5432:5432
     volumes:
       - /data/:/var/lib/postgresql/data --user 1000  # 리눅스 서버 일때 권한 오류시 사용 '"--user 1000'
-      #- C:\data:/var/lib/postgresql/data 윈도우 일 때
+      #- C:\data\:/var/lib/postgresql/data 윈도우 일 때
     networks:
       default_bridge:
         ipv4_address: 172.26.0.2
