@@ -33,7 +33,6 @@ def index(request : Request, skip: int = 0, limit: int = 100, db: Session = Depe
     context = {
         'request' : request,
         'items' : items,
-        'date' : now.strftime('%Y-%m-%d %H:%M:%S')
     }
     return board.TemplateResponse('board_main.html', context)
 

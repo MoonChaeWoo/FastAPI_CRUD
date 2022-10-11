@@ -6,8 +6,9 @@
 # ex) name: str
 # =이 점을 염두에 두어 사용 시 혼동되지 않는다. 
 
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import relationship
+import datetime
 
 from .conn import Base
 
@@ -34,6 +35,7 @@ class Item(Base):
     title = Column(String, index=True)
     description = Column(String, index=True)
     owner_id = Column(Integer, ForeignKey("users.id"))
+    date = Column(DateTime, default=datetime.datetime.utcnow)
 
     # relationship은 관계를 위해 SQLAlchemy ORM에서 제공하는 것을 사용 한다.
     # back_populate : relation에서 연결된 부분에서 접근할시의 이름

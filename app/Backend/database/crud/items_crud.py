@@ -9,9 +9,14 @@ from Backend.database import models, schemas
 # def get_items(db: Session, skip: int = 0, limit: int = 100):
 #     return db.query(models.Item).offset(skip).limit(limit).all()
 
+# db.users.filter_by(name == 'Joe')
+# db.users.filter(db.users.name == 'Joe')
+# 위이 2개는 같은 의미이다.
+# db.users.filter(or_(db.users.name=='Ryan', db.users.country=='England'))
+
 def get_items(db: Session, skip: int = 0, limit: int = 100):
-    print(db.query(models.Item, models.User).join(models.User).offset(skip).limit(limit).all())
-    return db.query(models.Item, models.User).join(models.User).offset(skip).limit(limit).all()
+    return db.query(models.Item, models.User).filter(models.Item.owner_id == models.User.id).order_by(models.Item.id.desc()).offset(skip).limit(limit).all()
+# .order_by()는 필터 바로 다음에 쓰거나 쿼리 바로 뒤에 사용해야 한다. offset이나 limit 뒤에 사용하면 오류 발생함. 
 
 # 데이터 생성 (Create)
 def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
