@@ -57,9 +57,11 @@ def index(request : Request):
     }
     return board.TemplateResponse('contact.html', context)
 
-@router.get("/board/post", response_class=HTMLResponse)
-def index(request : Request):
+@router.get("/board/post/{post_id}", response_class=HTMLResponse, response_model=schemas.Item)
+def index(request : Request, post_id: int, db: Session = Depends(get_db)):
+    item = items_crud.read_user_item(db, post_id)
     context = {
         'request' : request,
+        'item' : item
     }
     return board.TemplateResponse('post.html', context)
