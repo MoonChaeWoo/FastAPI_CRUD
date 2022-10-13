@@ -25,7 +25,7 @@ def index(request : Request):
 def index(request : Request):
     context = {
         'request' : request,
-        'items' : json_list
+        'items' : call_api()
     }
     return dashboard.TemplateResponse('tables.html', context)
 
