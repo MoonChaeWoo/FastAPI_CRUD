@@ -21,19 +21,23 @@ print(response.content.decode('utf8'))
 # 'searchDate' : datetime.now().date() - timedelta(days=1) 하루 전 날짜
 #content = response.text
 #print(content)
-json_list_disease = []
 
-try:
-    response = requests.get(url, params=params).json()
-    json_items = response['response']['body']['items']
+def call_diease():
 
-    for item in json_items:
-        # print(item)
-        json_list_disease.append(item)
+    json_list_disease = []
 
-except:
-    json_list_disease = None
-    #response = requests.get(url, params=params).text
-    #response = json.dumps(response)
-    #response = json.loads(response)
-#json_data = json.loads(response)
+    try:
+        response = requests.get(url, params=params).json()
+        json_items = response['response']['body']['items']
+
+        for item in json_items:
+            # print(item)
+            json_list_disease.append(item)
+
+    except:
+        json_list_disease = None
+        #response = requests.get(url, params=params).text
+        #response = json.dumps(response)
+        #response = json.loads(response)
+    #json_data = json.loads(response)
+    return json_list_disease

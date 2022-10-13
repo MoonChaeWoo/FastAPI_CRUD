@@ -3,8 +3,9 @@ from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse
 from fastapi import Request
 from Backend.common.config import conf
-from Backend.api.airInfo_json import json_list
-from Backend.api.disease import json_list_disease
+from Backend.api import airInfo_json
+from Backend.api.airInfo_json import call_api
+from Backend.api.disease import call_diease
 
 router = APIRouter()
 
@@ -15,8 +16,8 @@ dashboard = Jinja2Templates(directory=config.DASHBOARD)
 def index(request : Request):
     context = {
         'request' : request,
-        'items' : json_list,
-        'disease' : json_list_disease
+        'items' : call_api(),
+        'disease' : call_diease()
     }
     return dashboard.TemplateResponse('index.html', context)
 
@@ -32,7 +33,7 @@ def index(request : Request):
 def index(request : Request):
     context = {
         'request' : request,
-        'items' : json_list,
-        'disease' : json_list_disease
+        'items' : call_api(),
+        'disease' : call_diease()
     }
     return dashboard.TemplateResponse('charts.html', context)
