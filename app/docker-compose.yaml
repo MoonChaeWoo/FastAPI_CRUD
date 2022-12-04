@@ -2,16 +2,17 @@ version: '3.8'
 # 컨테이너를 정의할 때 "app", "server", "database" 처럼 이름을 정의해주면 해당 이름으로 컨테이너명이 설정된다
 services:
   database:
-    container_name: Postgres_service
-    image: postgres:11.17-bullseye
+    container_name: mysql_service
+    image: mysql:8.0.31-debian
     restart: always
     environment:
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DB}
     ports:
-      - 5432:5432
+      - 5432:${DB_PORT}
     volumes:
-      - /data/:/var/lib/postgresql/data --user 1000  # 리눅스 서버 일때 권한 오류시 사용 '"--user 1000'
+      - /data/:/var/lib/mysql # 리눅스 서버 일때 권한 오류시 사용 '"--user 1000'
       #- C:\data\:/var/lib/postgresql/data 윈도우 일 때
     networks:
       default_bridge:
