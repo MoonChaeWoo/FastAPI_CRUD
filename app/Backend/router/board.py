@@ -25,7 +25,7 @@ def get_db():
 
 now = datetime.now()
 
-@router.get("/board", response_class=HTMLResponse, response_model=List[schemas.Item])
+@router.get("/board", response_class=HTMLResponse, response_model=List[schemas.Item], tags=["board"])
 # request : Request를 받아야 html 호출 가능
 def index(request : Request, skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     items = items_crud.get_items(db, skip=skip, limit=limit)
@@ -36,28 +36,28 @@ def index(request : Request, skip: int = 0, limit: int = 100, db: Session = Depe
     }
     return board.TemplateResponse('board_main.html', context)
 
-@router.get("/board/write", response_class=HTMLResponse)
+@router.get("/board/write", response_class=HTMLResponse, tags=["board"])
 def index(request : Request):
     context = {
         'request' : request,
     }
     return board.TemplateResponse('insertBoard.html', context)
 
-@router.get("/board/about", response_class=HTMLResponse)
+@router.get("/board/about", response_class=HTMLResponse, tags=["board"])
 def index(request : Request):
     context = {
         'request' : request,
     }
     return board.TemplateResponse('about.html', context)
 
-@router.get("/board/contact", response_class=HTMLResponse)
+@router.get("/board/contact", response_class=HTMLResponse, tags=["board"])
 def index(request : Request):
     context = {
         'request' : request,
     }
     return board.TemplateResponse('contact.html', context)
 
-@router.get("/board/post/{post_id}", response_class=HTMLResponse, response_model=schemas.Item)
+@router.get("/board/post/{post_id}", response_class=HTMLResponse, response_model=schemas.Item, tags=["board"])
 def index(request : Request, post_id: int, db: Session = Depends(get_db)):
     item = items_crud.read_user_item(db, post_id)
     context = {

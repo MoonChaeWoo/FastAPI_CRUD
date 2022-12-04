@@ -12,7 +12,7 @@ router = APIRouter()
 config = conf()
 dashboard = Jinja2Templates(directory=config.DASHBOARD)
 
-@router.get("/dashboard", response_class=HTMLResponse)
+@router.get("/dashboard", response_class=HTMLResponse, tags=["dashBoard"])
 def index(request : Request):
     context = {
         'request' : request,
@@ -21,7 +21,7 @@ def index(request : Request):
     }
     return dashboard.TemplateResponse('index.html', context)
 
-@router.get("/dashboard/tables", response_class=HTMLResponse)
+@router.get("/dashboard/tables", response_class=HTMLResponse, tags=["dashBoard"])
 def index(request : Request):
     context = {
         'request' : request,
@@ -29,7 +29,7 @@ def index(request : Request):
     }
     return dashboard.TemplateResponse('tables.html', context)
 
-@router.get("/dashboard/charts", response_class=HTMLResponse)
+@router.get("/dashboard/charts", response_class=HTMLResponse, tags=["dashBoard"])
 def index(request : Request):
     context = {
         'request' : request,

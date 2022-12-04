@@ -1,11 +1,13 @@
 import email
-from fastapi import APIRouter
+from fastapi import APIRouter, Request, Depends, HTTPException
 from typing import List
-from fastapi import Depends, HTTPException
 from Backend.database import schemas
 from Backend.database.crud import users_crud
 from sqlmodel import Session
 from Backend.database.conn import SessionLocal
+from Backend.common.config import conf
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 
 router = APIRouter()
 
@@ -21,10 +23,22 @@ def get_db():
 # schemas.UserCreat : 스키마의 UserCreate 이용
 # db : Session = Depends(get_db()) 필요한 종성성을 생성하여 해당 세션을 직접 가져오기
 #      이를 통해 crud.get_user 내부에서 직접 호출하고 해당 세션을 사용할 수 있다.
+
+config = conf()
+templates = Jinja2Templates(directory=config.TEMPLATES)
+
+@router.get("/register/", response_class=HTMLResponse, tags=["users"])
+def index(request : Request):
+    context = {
+        'request' : request,
+    }
+    return templates.TemplateResponse('register.html', context)
+
 # 유저 생성하기
 @router.post("/users/", response_model=schemas.User, tags=["users"])
 def create_user(user : schemas.UserCreate, db : Session = Depends(get_db)):
     db_user = users_crud.get_user_by_email(db, email=user.email)
+    print(f'user_db {db_user}')
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
     return users_crud.create_user(db=db, user=user)

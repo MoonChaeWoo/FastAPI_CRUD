@@ -3,13 +3,13 @@
 # DTO란 Data Transfer Object의 약자로서 어떤 메소드나 클래스간 객체정보를 주고 받을 때 특정 모양으로 주고 받겠다는 일종의 약속
 # FastAPI의 스키마는 pydantic model에 종속돼있다. 
 
-from typing import List, Optional
+from typing import List
 from pydantic import BaseModel
 
 # item 스키마
 class ItemBase(BaseModel):
     title : str
-    description: Optional[str] = None
+    description: str | None = None
 
 class ItemCreate(ItemBase):
     pass
@@ -43,6 +43,10 @@ class UserCreate(UserBase):
 class userUpdate(UserCreate):
     id : int
 
+class UserLogin(UserCreate):
+    class Config:
+        orm_mode = True
+
 class User(UserBase):
     id : int
     is_active : bool
@@ -54,3 +58,10 @@ class User(UserBase):
 # jwt를 위한 class
 class UserInDB(User):
     hashed_password: str
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+
+class TokenData(BaseModel):
+    username: str | None = None

@@ -8,7 +8,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from Backend.database import models
 from Backend.database.conn import engin
-from Backend.router import board, items, users, dashboard
+from Backend.router import board, items, users, dashboard, login
 import time
 def create_app():
     # 앱 생성
@@ -50,6 +50,7 @@ def create_app():
     app.include_router(users.router)
     app.include_router(items.router)
     app.include_router(dashboard.router)
+    app.include_router(login.router)
 
     return app
 

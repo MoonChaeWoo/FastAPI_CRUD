@@ -12,3 +12,5 @@ app/__pycache__/main.cpython-310.pyc
 app/Backend/api/__pycache__/airInfo_json.cpython-310.pyc
 app/Backend/api/__pycache__/disease.cpython-310.pyc
 app/Backend/common/__pycache__/config.cpython-310.pyc
+app/Backend/common/__pycache__/config.cpython-310.pyc
+app/__pycache__/main.cpython-310.pyc

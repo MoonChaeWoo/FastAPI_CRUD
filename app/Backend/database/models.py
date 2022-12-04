@@ -9,6 +9,7 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime
 from sqlalchemy.orm import relationship
 import datetime
+from pydantic import BaseModel, Field
 
 from .conn import Base
 
@@ -42,3 +43,7 @@ class Item(Base):
     # relationship은 관계를 위해 SQLAlchemy ORM에서 제공하는 것을 사용 한다.
     # back_populate : relation에서 연결된 부분에서 접근할시의 이름
     owner = relationship("User", back_populates="items")
+
+# 토큰 생성
+# def generate_token() -> str:
+#     return secrets.token_urlsafe(32)
