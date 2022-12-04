@@ -15,7 +15,7 @@ class ItemCreate(ItemBase):
     pass
 
 class ItemUpdate(ItemCreate):
-    id : int
+    id : int 
 
 class Item(ItemBase):
     id : int
@@ -34,6 +34,7 @@ class Item(ItemBase):
 
 # user 스키마
 class UserBase(BaseModel):
+    name : str
     email : str
 
 class UserCreate(UserBase):
@@ -49,3 +50,7 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+# jwt를 위한 class
+class UserInDB(User):
+    hashed_password: str

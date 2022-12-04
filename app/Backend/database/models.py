@@ -19,8 +19,10 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, index=True)
-    email = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
+    name = Column(String(20), nullable=False)
+    email = Column(String(50), unique=True, index=True)
+    hashed_password = Column(String(60))
+
     is_active = Column(Boolean, default=True)
 
     # relationship은 관계를 위해 SQLAlchemy ORM에서 제공하는 것을 사용 한다.
@@ -32,8 +34,8 @@ class Item(Base):
     __tablename__ = "items"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    description = Column(String, index=True)
+    title = Column(String(50), index=True)
+    description = Column(String(50), index=True)
     owner_id = Column(Integer, ForeignKey("users.id"))
     date = Column(DateTime, default=datetime.datetime.utcnow)
 

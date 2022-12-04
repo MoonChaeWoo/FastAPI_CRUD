@@ -16,10 +16,10 @@ load_dotenv()
 SQLALCHEMY_DATABASE_URL = '{}://{}:{}@{}:{}/{}'.format(
     environ['DB_TYPE'],
     environ['DB_USER'],
-    environ['POSTGRES_PASSWORD'],
+    environ['MYSQL_PASSWORD'],
     environ['DB_HOST'],
     environ['DB_PORT'],
-    environ['POSTGRES_DB'],
+    environ['MYSQL_DB'],
 )
 
 # SQLALCHEMY_DATABASE_URL2 = f"postgresql+psycopg2://{db_user}:{db_password}@{db_host}:{db_port}/{db_database}"

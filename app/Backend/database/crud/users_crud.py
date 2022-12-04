@@ -5,6 +5,23 @@
 from sqlalchemy.orm import Session
 from .. import models, schemas
 
+# 비밀번호 해싱
+import secrets
+from passlib.context import CryptContext
+
+# 비밀번호를 해싱화 하기 위한 곳
+hasing = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+# 비밀번호 해쉬 생성
+def get_password_hash(password: str) -> str:
+    return hasing.hash(password)
+# 비밀번호 해쉬 검증
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return hasing.verify(plain_password, hashed_password)
+# 토큰 생성
+def generate_token() -> str:
+    return secrets.token_urlsafe(32)
+
 # 유저 한명 가져오기 
 def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
@@ -13,12 +30,17 @@ def get_user(db: Session, user_id: int):
 def get_user_by_email(db: Session, email: str):
     return db.query(models.User).filter(models.User.email == email).first()
     
+# 유저 비밀번호와 이메일 입력했는지 검증
+def check_user_password_and_email(user: schemas.UserCreate):
+    if not user.name or not user.email or not user.password:
+        return True
+    return False
+
 # 데이터 생성 (Create)
 def create_user(db: Session, user: schemas.UserCreate):
-    fake_hashed_password = user.password + "notreallyhashed"
-
+    passwd_hased = get_password_hash(user.password)
     #데이터로 SQLAlchemy 모델 인스턴스 를 만듭니다.
-    db_user = models.User(email=user.email, hashed_password=fake_hashed_password)
+    db_user = models.User(name=user.name ,email=user.email, hashed_password=passwd_hased)
     # add해당 인스턴스 개체를 데이터베이스 세션에 추가합니다.
     db.add(db_user)
     # commit데이터베이스에 대한 변경 사항(저장되도록).
