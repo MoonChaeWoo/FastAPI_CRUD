@@ -7,7 +7,7 @@ from Backend.database.crud import users_crud
 from sqlmodel import Session
 from Backend.common.config import conf
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from Backend.database.conn import SessionLocal
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt # pip install "python-jose[cryptography]
@@ -46,12 +46,35 @@ SECRET_KEY = environ['SECRET_KEY']
 ALGORITHM = environ['ALGORITHM']
 ACCESS_TOKEN_EXPIRE_MINUTES = environ['ACCESS_TOKEN_EXPIRE_MINUTES']
 
-@router.get("/login/", response_class=HTMLResponse, tags=["login"])
+@router.get("/login", response_class=HTMLResponse, tags=["login"])
 def index(request : Request):
     context = {
         'request' : request,
     }
     return templates.TemplateResponse('login.html', context)
+
+@router.post("/login", response_class=HTMLResponse, tags=["login"])
+def index(request : Request, form_data: OAuth2PasswordRequestForm = Depends(), db : Session = Depends(get_db)):
+    user_auth = users_crud.authenticate_user(db, form_data.username, form_data.password)
+    print(f'username : {form_data.username}, password : {form_data.password}')
+    print(f'user_auth : {user_auth}')
+    if user_auth:
+        access_token_expires = timedelta(minutes=int(ACCESS_TOKEN_EXPIRE_MINUTES))
+        access_token = create_access_token(
+            data={"sub": user_auth.email}, expires_delta=access_token_expires
+        )
+        response = RedirectResponse("/", status_code=302)
+        response.set_cookie(key="access_token", value=access_token, httponly=True)
+        return response
+    else:
+        return templates.TemplateResponse(
+            "login.html",
+            {
+                "request": request,
+                "errors": ["Username 또는 Password가 틀립니다"]
+            }
+        )
+    
 
 @router.post("/login/token", response_model=schemas.Token, tags=["login"])
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db : Session = Depends(get_db)):
