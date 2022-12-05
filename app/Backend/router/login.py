@@ -1,6 +1,6 @@
 import email
 from typing import List
-from fastapi import Depends, HTTPException, Request, APIRouter
+from fastapi import Depends, HTTPException, Request, APIRouter, status
 from Backend.database import schemas
 from Backend.database.crud import users_crud
 from sqlmodel import Session
@@ -58,13 +58,14 @@ def index(request : Request):
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db : Session = Depends(get_db)):
     if not form_data.username or not form_data.password:
         raise HTTPException(status_code=400, detail="Email and password must be provided")
-    user_info =users_crud.get_user_by_email(db, form_data.username)
-    if users_crud.verify_password(form_data.password, user_info.hashed_password):
+    user_auth = users_crud.authenticate_user(db, form_data.username, form_data.password)
+    if not user_auth:
+        raise HTTPException(status_code=400, detail="Incorrect username or password")
+    else:
         # users_crud에 구현해둔 해쉬 비밀번호 비교를 이용함
         return {"access_token": form_data.username, "token_type": "bearer"}
-    else:
-        raise HTTPException(status_code=400, detail="Incorrect username or password")
 
+# -------------------------------------------------------------------------------------------------
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
     if expires_delta:

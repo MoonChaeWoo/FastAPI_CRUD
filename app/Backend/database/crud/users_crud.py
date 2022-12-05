@@ -28,7 +28,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 
 def authenticate_user(db, username: str, password: str):
-    user = get_user(db, username)
+    user = get_user_by_email(db, username)
     if not user:
         return False
     if not verify_password(password, user.hashed_password):
@@ -41,8 +41,6 @@ def get_user(db: Session, user_id: int):
 
 # 유저 이메일 가져오기
 def get_user_by_email(db: Session, email: str):
-    user_info = db.query(models.User).filter(models.User.email == email).first()
-    print(user_info)
     return db.query(models.User).filter(models.User.email == email).first()
     
 # 유저 비밀번호와 이메일 입력했는지 검증
