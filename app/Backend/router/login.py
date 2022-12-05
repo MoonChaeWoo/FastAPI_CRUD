@@ -1,5 +1,6 @@
 import email
 from typing import List
+from datetime import datetime, timedelta
 from fastapi import Depends, HTTPException, Request, APIRouter, status
 from Backend.database import schemas
 from Backend.database.crud import users_crud
@@ -12,8 +13,6 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt # pip install "python-jose[cryptography]
 from os import environ
 from dotenv import load_dotenv
-from datetime import timedelta
-
 # .env 환경파일 로드 
 load_dotenv()
 
@@ -66,14 +65,13 @@ async def login(form_data: OAuth2PasswordRequestForm = Depends(), db : Session =
             headers={"WWW-Authenticate": "Bearer"},
         )
     else:
-        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token_expires = timedelta(minutes=int(ACCESS_TOKEN_EXPIRE_MINUTES))
         access_token = create_access_token(
-            data={"sub": user_auth.username}, expires_delta=access_token_expires
+            data={"sub": user_auth.email}, expires_delta=access_token_expires
         )
         # users_crud에 구현해둔 해쉬 비밀번호 비교를 이용함
         return {"access_token": access_token, "token_type": "bearer"}
 
-# -------------------------------------------------------------------------------------------------
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
     to_encode = data.copy()
     if expires_delta:
