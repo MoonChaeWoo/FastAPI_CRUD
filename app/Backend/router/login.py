@@ -54,16 +54,24 @@ def index(request : Request):
     }
     return templates.TemplateResponse('login.html', context)
 
-@router.post("/login/token", tags=["login"])
+@router.post("/login/token", response_model=schemas.Token, tags=["login"])
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db : Session = Depends(get_db)):
     if not form_data.username or not form_data.password:
         raise HTTPException(status_code=400, detail="Email and password must be provided")
     user_auth = users_crud.authenticate_user(db, form_data.username, form_data.password)
     if not user_auth:
-        raise HTTPException(status_code=400, detail="Incorrect username or password")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     else:
+        access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        access_token = create_access_token(
+            data={"sub": user_auth.username}, expires_delta=access_token_expires
+        )
         # users_crud에 구현해둔 해쉬 비밀번호 비교를 이용함
-        return {"access_token": form_data.username, "token_type": "bearer"}
+        return {"access_token": access_token, "token_type": "bearer"}
 
 # -------------------------------------------------------------------------------------------------
 def create_access_token(data: dict, expires_delta: timedelta | None = None):
