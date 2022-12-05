@@ -34,7 +34,7 @@ def authenticate_user(db, username: str, password: str):
     if not verify_password(password, user.hashed_password):
         return False
     return user
-# ---------------------------------------------------------
+
 # 유저 한명 가져오기 
 def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()

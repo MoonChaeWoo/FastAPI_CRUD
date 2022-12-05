@@ -54,7 +54,7 @@ def index(request : Request):
     }
     return templates.TemplateResponse('login.html', context)
 
-@router.post("/login/", tags=["login"])
+@router.post("/login/token", tags=["login"])
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db : Session = Depends(get_db)):
     if not form_data.username or not form_data.password:
         raise HTTPException(status_code=400, detail="Email and password must be provided")
