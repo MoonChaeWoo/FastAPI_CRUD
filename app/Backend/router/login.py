@@ -71,7 +71,7 @@ def index(request : Request, form_data: OAuth2PasswordRequestForm = Depends(), d
             "login.html",
             {
                 "request": request,
-                "errors": ["Username 또는 Password가 틀립니다"]
+                "errors": "Email 또는 Password가 틀립니다"
             }
         )
     
@@ -100,7 +100,11 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     if expires_delta:
         expire = datetime.utcnow() + expires_delta
     else:
-        expire = datetime.utcnow() + timedelta(minutes=15)
+        # utcnow()는 Python코드를 실행하는 서버나 컴퓨터의 시간에 상관없이 UTC값을 기준으로 계산됨
+        # timedelta 클래스의 생성자는 주, 일, 시, 분, 초, 밀리 초, 마이크로 초를 인자로 받는다.
+        # timedelta 객체는 내부적으로 일, 초, 마이크로 초 단위만 저장한다.
+        # timedelta 객체와 함께 산술/대소 연산자를 사용할 수 있다.
+        expire = datetime.utcnow() + timedelta(minutes=15) 
     to_encode.update({"exp": expire})
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt

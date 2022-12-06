@@ -11381,3 +11381,13 @@ header.masthead .bg-circle-4 {
     font-size: 4rem;
   }
 }
+
+.login_error_message_parents{
+  display: flex;
+  justify-content: center;
+}
+
+.login_error_message{
+  color: red;
+  width: fit-content;
+}
