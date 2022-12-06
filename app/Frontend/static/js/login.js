@@ -8,6 +8,13 @@ $('#login_form').submit((evt) => {
     let formData = $('#login_form').serialize();
 
     $.post('/login/', formData, (result)=>{
+        document.body.innerHTML = ''; 
         document.write(result);
+    }).fail(function(request, status, error) {
+        if(request.status == 400){
+            $('.login_error_message').text('Please confirm your email or password');
+        }else{
+            $('.login_error_message').text('There is a problem and login is not possible. Contact your manager.');
+        }
     });
-})
+});

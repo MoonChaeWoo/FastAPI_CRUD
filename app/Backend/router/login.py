@@ -65,14 +65,7 @@ def index(request : Request, form_data: OAuth2PasswordRequestForm = Depends(), d
         response.set_cookie(key="access_token", value=access_token, httponly=True)
         return response
     else:
-        return templates.TemplateResponse(
-            "login.html",
-            {
-                "request": request,
-                "errors": "Email 또는 Password가 틀립니다"
-            }
-        )
-    
+        return RedirectResponse("/login", status_code=400)
 
 @router.post("/login/token", response_model=schemas.Token, tags=["login"])
 async def login(form_data: OAuth2PasswordRequestForm = Depends(), db : Session = Depends(get_db)):

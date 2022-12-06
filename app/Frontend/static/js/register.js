@@ -19,8 +19,15 @@ $('#register_form').submit((evt) => {
     let formData = $('#register_form').serialize();
 
     $.post('/register', formData, (result)=>{
-        alert("You have become a member.");
+        document.body.innerHTML = '';      
         document.write(result);
+        alert('You have registered as a member!');
+    }).fail(function(request, status, error) {
+        if(request.status == 400){
+            $('.register_error_message').text('Email already registered');
+        }else{
+            $('.register_error_message').text('There is a problem and registration is not possible. Contact your manager.');
+        }
     });
 })
 

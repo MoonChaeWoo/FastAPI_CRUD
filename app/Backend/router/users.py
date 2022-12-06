@@ -46,44 +46,17 @@ async def index(request : Request, form_data : schemas.UserCreate = Depends(sche
     db_user = users_crud.get_user_by_email(db, email=form_data.email)
 
     if db_user:
-        errors = "Email already registered"
+        errors = 400
+        return RedirectResponse("/register", status_code=errors)
     try:
         users_crud.create_user(db = db, user = form_data)
     except:
-        errors = "Member registration was not successful"
+        errors = 500
+        return RedirectResponse("/register", status_code=errors)
 
     if errors == None:
         return RedirectResponse("/", status_code=302)
-    else:
-        context = {
-            "request": request,
-            "errors": errors
-        }
-
-        return templates.TemplateResponse("register.html", context)
-
-    # db_user = users_crud.get_user_by_email(db, email=user_dict.email)
-    # if db_user:
-    #     return templates.TemplateResponse(
-    #         "register.html",
-    #         {
-    #             "request": request,
-    #             "errors": "Email already registered"
-    #         }
-    #     )
-    # try:
-    #     users_crud.create_user(db=db, user=user_dict)
-    # except:
-    #     return templates.TemplateResponse(
-    #         "register.html",
-    #         {
-    #             "request": request,
-    #             "errors": "회원가입이 정상적으로 이루어지지 않았습니다."
-    #         }
-    #     )
-    # response = RedirectResponse("/", status_code=302)
-    
-    # return response
+        
 
 # 유저 생성하기
 @router.post("/users", response_model=schemas.User, tags=["users"])
