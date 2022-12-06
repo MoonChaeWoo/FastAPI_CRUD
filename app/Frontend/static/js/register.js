@@ -16,19 +16,11 @@ $('#register_form').submit((evt) => {
         return;
     };
 
-    let formData = {
-        "name": $inputName,
-        "email": $inputEmail,
-        "password": $inputPassword
-      }
+    let formData = $('#register_form').serialize();
 
-    $.ajax({
-        type : "post",
-        contentType: "application/json",
-        data : JSON.stringify(formData),
-        success : function(result) {
-            document.write(result);
-        }
+    $.post('/register', formData, (result)=>{
+        alert("You have become a member.");
+        document.write(result);
     });
 })
 

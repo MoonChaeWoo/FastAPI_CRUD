@@ -5,6 +5,7 @@
 
 from typing import List
 from pydantic import BaseModel
+from fastapi import Form
 
 # item 스키마
 class ItemBase(BaseModel):
@@ -39,6 +40,12 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password : str
+
+    # 아래와 같이 classmethod를 생성해주어야 jinja2에서 ajax 데이터를 보내면 받을 수 있다.
+    # @staticmethod도 있음
+    @classmethod
+    def as_form(cls, name : str = Form(...), email : str = Form(...), password : str = Form(...)):
+        return cls(name = name, email = email, password = password)
 
 class userUpdate(UserCreate):
     id : int

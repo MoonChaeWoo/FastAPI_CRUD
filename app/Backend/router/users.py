@@ -37,29 +37,53 @@ def index(request : Request):
     return templates.TemplateResponse('register.html', context)
 
 @router.post("/register", response_class=HTMLResponse, tags=["register"])
-async def index(request : Request, user_dict : schemas.UserCreate, db : Session = Depends(get_db)):
-    db_user = users_crud.get_user_by_email(db, email=user_dict.email)
+async def index(request : Request, form_data : schemas.UserCreate = Depends(schemas.UserCreate.as_form), db : Session = Depends(get_db)):
+    # 아래처럼 하면 값을 하나씩 볼 수 있다.
+    # name = form_data.name
+    # email = form_data.email
+    # password = form_data.password
+    errors = None
+    db_user = users_crud.get_user_by_email(db, email=form_data.email)
+
     if db_user:
-        return templates.TemplateResponse(
-            "register.html",
-            {
-                "request": request,
-                "errors": "Email already registered"
-            }
-        )
+        errors = "Email already registered"
     try:
-        users_crud.create_user(db=db, user=user_dict)
+        users_crud.create_user(db = db, user = form_data)
     except:
-        return templates.TemplateResponse(
-            "register.html",
-            {
-                "request": request,
-                "errors": "회원가입이 정상적으로 이루어지지 않았습니다."
-            }
-        )
-    response = RedirectResponse("/", status_code=302)
+        errors = "Member registration was not successful"
+
+    if errors == None:
+        return RedirectResponse("/", status_code=302)
+    else:
+        context = {
+            "request": request,
+            "errors": errors
+        }
+
+        return templates.TemplateResponse("register.html", context)
+
+    # db_user = users_crud.get_user_by_email(db, email=user_dict.email)
+    # if db_user:
+    #     return templates.TemplateResponse(
+    #         "register.html",
+    #         {
+    #             "request": request,
+    #             "errors": "Email already registered"
+    #         }
+    #     )
+    # try:
+    #     users_crud.create_user(db=db, user=user_dict)
+    # except:
+    #     return templates.TemplateResponse(
+    #         "register.html",
+    #         {
+    #             "request": request,
+    #             "errors": "회원가입이 정상적으로 이루어지지 않았습니다."
+    #         }
+    #     )
+    # response = RedirectResponse("/", status_code=302)
     
-    return response
+    # return response
 
 # 유저 생성하기
 @router.post("/users", response_model=schemas.User, tags=["users"])
