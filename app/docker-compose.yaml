@@ -10,7 +10,7 @@ services:
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
       - MYSQL_DATABASE=${MYSQL_DB}
     ports:
-      - 5432:${DB_PORT}
+      - 3306:${DB_PORT}
     volumes:
       - /data/:/var/lib/mysql # 리눅스 서버 일때 권한 오류시 사용 '"--user 1000'
       #- C:\data\:/var/lib/postgresql/data 윈도우 일 때
