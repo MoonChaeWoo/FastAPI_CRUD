@@ -1,4 +1,4 @@
-FROM python:3.8.6
+FROM python:3.10.5
 LABEL email="tyche0529@naver.com"
 LABEL name="Moon Chae Woo"
 LABEL version="1.0"
