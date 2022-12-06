@@ -56,8 +56,6 @@ def index(request : Request):
 @router.post("/login", response_class=HTMLResponse, tags=["login"])
 def index(request : Request, form_data: OAuth2PasswordRequestForm = Depends(), db : Session = Depends(get_db)):
     user_auth = users_crud.authenticate_user(db, form_data.username, form_data.password)
-    print(f'username : {form_data.username}, password : {form_data.password}')
-    print(f'user_auth : {user_auth}')
     if user_auth:
         access_token_expires = timedelta(minutes=int(ACCESS_TOKEN_EXPIRE_MINUTES))
         access_token = create_access_token(

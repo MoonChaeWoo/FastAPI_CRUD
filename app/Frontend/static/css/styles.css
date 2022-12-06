@@ -11391,3 +11391,14 @@ header.masthead .bg-circle-4 {
   color: red;
   width: fit-content;
 }
+
+.register_error_message_parents{
+  display: flex;
+  justify-content: center;
+}
+
+.register_error_message{
+  color: red;
+  width: fit-content;
+  font-size: 20px;
+}

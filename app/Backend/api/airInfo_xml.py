@@ -41,11 +41,6 @@ root = tree.getroot()
 # 위와 같이 2줄로 하는 방법이 있으며
 # root = ET.fromstring(items)
 
-print(root)
-
-
-
-
 #dict_type = xmltodict.parse(items)
 
 # print(dict_type)

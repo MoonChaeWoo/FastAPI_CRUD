@@ -1,5 +1,5 @@
 import email
-from fastapi import APIRouter, Request, Depends, HTTPException
+from fastapi import APIRouter, Request, Depends, HTTPException, Form, Body
 from typing import List
 from Backend.database import schemas
 from Backend.database.crud import users_crud
@@ -7,7 +7,9 @@ from sqlmodel import Session
 from Backend.database.conn import SessionLocal
 from Backend.common.config import conf
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.encoders import jsonable_encoder
+import json
 
 router = APIRouter()
 
@@ -27,15 +29,40 @@ def get_db():
 config = conf()
 templates = Jinja2Templates(directory=config.TEMPLATES)
 
-@router.get("/register/", response_class=HTMLResponse, tags=["users"])
+@router.get("/register", response_class=HTMLResponse, tags=["register"])
 def index(request : Request):
     context = {
         'request' : request,
     }
     return templates.TemplateResponse('register.html', context)
 
+@router.post("/register", response_class=HTMLResponse, tags=["register"])
+async def index(request : Request, user_dict : schemas.UserCreate, db : Session = Depends(get_db)):
+    db_user = users_crud.get_user_by_email(db, email=user_dict.email)
+    if db_user:
+        return templates.TemplateResponse(
+            "register.html",
+            {
+                "request": request,
+                "errors": "Email already registered"
+            }
+        )
+    try:
+        users_crud.create_user(db=db, user=user_dict)
+    except:
+        return templates.TemplateResponse(
+            "register.html",
+            {
+                "request": request,
+                "errors": "회원가입이 정상적으로 이루어지지 않았습니다."
+            }
+        )
+    response = RedirectResponse("/", status_code=302)
+    
+    return response
+
 # 유저 생성하기
-@router.post("/users/", response_model=schemas.User, tags=["users"])
+@router.post("/users", response_model=schemas.User, tags=["users"])
 def create_user(user : schemas.UserCreate, db : Session = Depends(get_db)):
     db_user = users_crud.get_user_by_email(db, email=user.email)
     if db_user:
@@ -53,7 +80,7 @@ def create_user(user : schemas.UserCreate, db : Session = Depends(get_db)):
 # !!! SQLAlchemy는 await다음과 같이 직접 사용할 수 있는 호환성이 없다.
 # tags=["users"]는 docs에 users라는 tag가 생긴다.
 # 모든 유저 목록 가져오기
-@router.get("/users/", response_model=List[schemas.User], tags=["users"])
+@router.get("/users", response_model=List[schemas.User], tags=["users"])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     users = users_crud.get_users(db, skip=skip, limit=limit)
     print("----")
