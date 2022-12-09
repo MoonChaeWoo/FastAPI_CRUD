@@ -41,7 +41,7 @@ def create_app():
         # body = await request.body()
 
         response = await call_next(request)
-        print(f'response : {response}')
+        #print(f'response : {response}')
 
         return response
 

@@ -1,11 +1,13 @@
-$('#login_form').submit((evt) => {
+var $login_form = $('#login_form');
+
+$login_form.submit((evt) => {
     evt.preventDefault();
     if(!$('#inputEmail').val() || !$('#inputPassword').val()){
         alert('Enter your ID or password');   
         return;
     };
 
-    let formData = $('#login_form').serialize();
+    let formData = $login_form.serialize();
 
     $.post('/login/', formData, (result)=>{
         document.body.innerHTML = ''; 

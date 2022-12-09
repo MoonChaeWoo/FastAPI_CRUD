@@ -80,11 +80,9 @@ def create_user(user : schemas.UserCreate, db : Session = Depends(get_db)):
 @router.get("/users", response_model=List[schemas.User], tags=["users"])
 def read_users(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     users = users_crud.get_users(db, skip=skip, limit=limit)
-    print("----")
     # db에서 온 값을 터미널로 확인하려면 iterator 객체이기 때문에 for로 뽑아서 읽어준다.
-    for result in users:
-        print(f"id:{result.id} email:{result.email}")
-    print("----")
+    #for result in users:
+        #print(f"id:{result.id} email:{result.email}")
     return users
 
 # 특정 유저 찾기

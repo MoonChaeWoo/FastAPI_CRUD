@@ -1,4 +1,6 @@
-$('#register_form').submit((evt) => {
+var $register_form = $('#register_form');
+
+$register_form.submit((evt) => {
     evt.preventDefault();
 
     $inputName = $('#inputName').val()
@@ -16,7 +18,7 @@ $('#register_form').submit((evt) => {
         return;
     };
 
-    let formData = $('#register_form').serialize();
+    let formData = $register_form.serialize();
 
     $.post('/register', formData, (result)=>{
         document.body.innerHTML = '';      

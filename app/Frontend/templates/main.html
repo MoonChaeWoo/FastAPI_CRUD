@@ -26,7 +26,7 @@
                 <div class="container px-5">
                     <h1 class="masthead-heading mb-0">Learning page</h1>
                     <h2 class="masthead-subheading mb-0">Creating a bulletin board using fastapi</h2>
-                    <a class="btn btn-primary btn-xl rounded-pill mt-5" href="/board">View bulletin board</a>
+                    <a class="btn btn-primary btn-xl rounded-pill mt-5" id="mainToBoard">View bulletin board</a>
                     <a class="btn btn-primary btn-xl rounded-pill mt-5" href="/dashboard">View dashboard</a>
                 </div>
             </div>
@@ -87,6 +87,7 @@
         <footer class="py-5 bg-black">
             <div class="container px-5"><p class="m-0 text-center text-white small">Copyright &copy; tyche0529@naver.com 2022</p></div>
         </footer>
+        <script src="{{ url_for('static', path='/js/mainToBoard.js') }}"></script>
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
         {% endblock %}
