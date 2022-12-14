@@ -4,7 +4,7 @@ $mainToBoard.click((evt) => {
     evt.preventDefault();
 
     $.get('/board', {}, () => {
-        window.location.href = 'board'
+        window.location.href = '/board'
     }).fail(function(request, status, error) {
         console.log('error', request.status);
         if(request.status == 401){

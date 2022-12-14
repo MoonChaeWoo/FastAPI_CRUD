@@ -21,8 +21,7 @@
             <div class="col-md-10 col-lg-8 col-xl-7">
                 <div class="my-5">
                     <!-- <form id="contentForm" data-sb-form-api-token="API_TOKEN"></form> -->
-                    <input type="hidden" data-test="0000">
-                    <form id="contentForm">
+                    <form id="contentForm" enctype="multipart/form-data">
                         <div class="form-floating">
                             <input class="form-control" id="board_title" name="title" type="text" placeholder="Enter your Title..." data-sb-validations="required" />
                             <label for="post-title">title</label>
@@ -32,6 +31,9 @@
                             <textarea class="form-control" id="board_content" name="description" placeholder="Enter your content here..." style="height: 12rem" data-sb-validations="required"></textarea>
                             <label for="content">content</label>
                             <div class="invalid-feedback" data-sb-feedback="content:required">A content is required.</div>
+                        </div>
+                        <div class="form-floating">
+                            <input class="form-control" id="board_file" name="uploadFile" type="file"/>
                         </div>
                         <br />
                         <button class="btn btn-primary text-uppercase" id="submitButton" type="submit">save</button>

@@ -6,7 +6,7 @@
 # ex) name: str
 # =이 점을 염두에 두어 사용 시 혼동되지 않는다. 
 
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, BLOB
 from sqlalchemy.orm import relationship
 import datetime
 from pydantic import BaseModel, Field
@@ -37,6 +37,7 @@ class Item(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(50), index=True)
     description = Column(String(50), index=True)
+    uploadFile = Column(BLOB, index=True)
     owner_id = Column(Integer, ForeignKey("users.id"))
     date = Column(DateTime, default=datetime.datetime.utcnow)
 

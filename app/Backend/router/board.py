@@ -1,4 +1,5 @@
-from fastapi import APIRouter, Depends, Cookie, Request, HTTPException, status
+from fastapi import APIRouter, Depends, Cookie, Request, HTTPException, status, UploadFile
+from pathlib import Path
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
 from Backend.common.config import conf
@@ -48,6 +49,22 @@ def index(request : Request, access_token : str | None = Cookie(default=None), d
     }
     return board.TemplateResponse('insertBoard.html', context)
 
+@router.post("/board/write", response_class=HTMLResponse, tags=["board"])
+async def index(request : Request, form_data : schemas.ItemCreate = Depends(schemas.ItemCreate.as_form), access_token : str | None = Cookie(default=None), db : Session = Depends(get_db)):
+    # access_token : str | None = Cookie(default=None)
+    # 쿠키를 받아오려면 웹에 저장된 쿠키의 이름과 파라미터의 이름을 동일 시 해야만 값이 불러와진다.
+    user_email = token_ckeck(access_token, db)
+
+    print(f'form_data ================================> {form_data}')
+    print(f'form_data_title ================================> {form_data.title}')
+    print(f'form_data_content ================================> {form_data.description}')
+    print(f'form_data_file.filename ================================> {form_data.uploadFile.filename}')
+
+    context = {
+        'request' : request,
+    }
+    return board.TemplateResponse('insertBoard.html', context)
+
 @router.get("/board/about", response_class=HTMLResponse, tags=["board"])
 def index(request : Request, access_token : str | None = Cookie(default=None), db: Session = Depends(get_db)):
     # access_token : str | None = Cookie(default=None)
@@ -82,10 +99,6 @@ def index(request : Request, post_id: int, access_token : str | None = Cookie(de
 
     # 토큰이 유무 체크 
 def token_ckeck(value, db):
-
-    if not value:
-        raise HTTPException(status_code=401, detail="Inactive user")
-
     try:
         decode = jwt.decode(value, SECRET_KEY)
     except:
@@ -96,3 +109,6 @@ def token_ckeck(value, db):
     if not users_crud.get_user_by_email(db, user_email):
         return RedirectResponse("/", status_code=403)
     return user_email
+
+def save_upload_file(uploadFile : UploadFile, path : Path) -> None:
+    pass

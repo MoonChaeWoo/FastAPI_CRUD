@@ -5,7 +5,7 @@
 
 from typing import List
 from pydantic import BaseModel
-from fastapi import Form
+from fastapi import Form, File, UploadFile
 
 # item 스키마
 class ItemBase(BaseModel):
@@ -13,7 +13,11 @@ class ItemBase(BaseModel):
     description: str | None = None
 
 class ItemCreate(ItemBase):
-    pass
+    uploadFile : UploadFile | None = None
+
+    @classmethod
+    def as_form(cls, title : str = Form(...), description : str = Form(...), uploadFile : UploadFile = File(...)):
+        return cls(title = title, description = description, uploadFile = uploadFile)
 
 class ItemUpdate(ItemCreate):
     id : int 

@@ -1,5 +1,5 @@
 from urllib.request import Request
-from fastapi import FastAPI
+from fastapi import FastAPI, Cookie, Request, HTTPException, status
 from Backend.common.config import conf
 import uvicorn
 from fastapi.templating import Jinja2Templates
@@ -10,6 +10,9 @@ from Backend.database import models
 from Backend.database.conn import engin
 from Backend.router import board, items, users, dashboard, login
 import time
+from jose import JWTError, jwt
+from Backend.router.login import SECRET_KEY
+
 def create_app():
     # 앱 생성
     app = FastAPI(
@@ -26,24 +29,27 @@ def create_app():
     # request는 실제 request로 API로 보내진 정보를 담고있다.
     # call_next는 함수 파라메터로, API 리퀘스트를 API에 해당되는 path에 보내고, response를 리턴하는 역할을 하는 파라메터이다.
     @app.middleware("http")
-    async def add_process_time_header(request: Request, call_next):
+    async def add_process_time_header(request: Request, call_next, access_token : str | None = Cookie(default=None)):
         #start_time = time.time()
         #response = await call_next(request)
         #process_time = time.time() - start_time
         #response.headers["X-Process-Time"] = str(process_time)
-        requestEndpoint = str(request.method) + " " + str(request.url.path)
-        print(f'requestEndpoint : {requestEndpoint}')
+        # requestEndpoint = str(request.method) + " " + str(request.url.path)
+        # print(f'requestEndpoint : {requestEndpoint}')
 
-        client = str(request.client.host) + " : " + str(request.client.port)
-        print(f'client : {client}')
+        # client = str(request.client.host) + " : " + str(request.client.port)
+        # print(f'client : {client}')
 
         # 미들 웨어에서는 body는 사용하면 안됨
         # body = await request.body()
+        if 'board' in str(request.url.path):
+            if not access_token:
+                raise HTTPException(status_code=401, detail="Inactive user")
 
         response = await call_next(request)
-        #print(f'response : {response}')
 
         return response
+
 
     # 라우터 정의
     app.include_router(board.router)
