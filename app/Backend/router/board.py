@@ -57,16 +57,19 @@ def index(request : Request, access_token : str | None = Cookie(default=None), d
 async def index(request : Request, form_data : schemas.ItemCreate = Depends(schemas.ItemCreate.as_form), access_token : str | None = Cookie(default=None), db : Session = Depends(get_db)):
     # access_token : str | None = Cookie(default=None)
     # 쿠키를 받아오려면 웹에 저장된 쿠키의 이름과 파라미터의 이름을 동일 시 해야만 값이 불러와진다.
-    user_email = token_ckeck(access_token, db)
+    user_info = token_ckeck(access_token, db)
 
     if form_data.uploadFile != None:
-        save_upload_file(form_data.uploadFile, user_email)
+        filePath = save_upload_file(form_data.uploadFile, user_info["email"])
+        form_data.uploadFile = bytes(filePath, encoding='utf-8')
+        items_crud.create_user_item(db, form_data, user_info["id"])
         # UploadFile안의 속성
         # 1. filename
         # 2. content_type
         # 3. file
+        # print(f'path ========================>>> {form_data.uploadFile.decode("utf-8")}')
     else:
-        pass
+        items_crud.create_user_item(db, form_data, user_info["id"])
 
     context = {
         'request' : request,
@@ -111,12 +114,17 @@ def token_ckeck(value, db):
         decode = jwt.decode(value, SECRET_KEY)
     except:
         raise HTTPException(status_code=500, detail="An authentication error occurred")
-
+        
     user_email = decode['sub']
 
+    id : int = 0
     if not users_crud.get_user_by_email(db, user_email):
-        return RedirectResponse("/", status_code=403)
-    return user_email
+        raise HTTPException(status_code=403, detail="An authentication error occurred")
+    else:
+        id = users_crud.get_user_by_email(db, user_email).id
+
+    user_info = {'email' : user_email, 'id' : id}
+    return user_info
 
 def mkdir(dir):
     try:
@@ -125,7 +133,7 @@ def mkdir(dir):
     except OSError:
         print('Error : fail mkdir')
 
-def save_upload_file(uploadFile : UploadFile, user_email : str) -> None:
+def save_upload_file(uploadFile : UploadFile, user_email : str) -> str:
 
     yearDir = path.join(uploadPath, str(datetime.today().year))
     monDir = path.join(yearDir, str(datetime.today().month))
@@ -135,13 +143,14 @@ def save_upload_file(uploadFile : UploadFile, user_email : str) -> None:
     for i in uploadPath, yearDir, monDir, dayDir, userDir:
         mkdir(i)
 
-    fileDir = path.join(userDir, uploadFile.filename)
+    filePath = path.join(userDir, uploadFile.filename)
 
     CHUNK_SIZE = 1024
-    with open(fileDir, 'wb') as buffer:
+    with open(filePath, 'wb') as buffer:
         while contents := uploadFile.file.read(CHUNK_SIZE):
             buffer.write(contents)
         uploadFile.file.close()
+    return filePath
 
 # with를 함께 사용한다면 파일 입출력 단계에서 해당 파일을 위해 openk close를 해주어야하는데 
 # "with open('C:/pythonTest/abc.txt', 'r') as file_data" 를 한다면 with가 자동으로 close를 불러와준다.
