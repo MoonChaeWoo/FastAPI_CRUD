@@ -1,5 +1,8 @@
 from fastapi import APIRouter, Depends, Cookie, Request, HTTPException, status, UploadFile
 from pathlib import Path
+from os import path
+import os
+import aiofiles, asyncio
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
 from Backend.common.config import conf
@@ -16,6 +19,7 @@ router = APIRouter()
 
 config = conf()
 board = Jinja2Templates(directory=config.BOARD)
+uploadPath = config.UPLOAD
 
 def get_db():
     db = SessionLocal()
@@ -53,12 +57,13 @@ def index(request : Request, access_token : str | None = Cookie(default=None), d
 async def index(request : Request, form_data : schemas.ItemCreate = Depends(schemas.ItemCreate.as_form), access_token : str | None = Cookie(default=None), db : Session = Depends(get_db)):
     # access_token : str | None = Cookie(default=None)
     # 쿠키를 받아오려면 웹에 저장된 쿠키의 이름과 파라미터의 이름을 동일 시 해야만 값이 불러와진다.
-    user_email = token_ckeck(access_token, db)
 
-    print(f'form_data ================================> {form_data}')
-    print(f'form_data_title ================================> {form_data.title}')
-    print(f'form_data_content ================================> {form_data.description}')
-    print(f'form_data_file.filename ================================> {form_data.uploadFile.filename}')
+    user_email = token_ckeck(access_token, db)
+    save_upload_file(form_data.uploadFile, user_email)
+    # UploadFile안의 속성
+    # 1. filename
+    # 2. content_type
+    # 3. file
 
     context = {
         'request' : request,
@@ -110,5 +115,30 @@ def token_ckeck(value, db):
         return RedirectResponse("/", status_code=403)
     return user_email
 
-def save_upload_file(uploadFile : UploadFile, path : Path) -> None:
-    pass
+def mkdir(dir):
+    try:
+        if not os.path.exists(dir):
+            os.makedirs(dir)
+    except OSError:
+        print('Error : fail mkdir')
+
+def save_upload_file(uploadFile : UploadFile, user_email : str) -> None:
+
+    yearDir = path.join(uploadPath, str(datetime.today().year))
+    monDir = path.join(yearDir, str(datetime.today().month))
+    dayDir = path.join(monDir, str(datetime.today().day))
+    userDir = path.join(dayDir, str(user_email))
+    # 파일은 통째로 저장하는거 보단 연도, 날짜 등으로 나눠 저장하는게 성능에 더 좋다.
+    for i in uploadPath, yearDir, monDir, dayDir, userDir:
+        mkdir(i)
+
+    fileDir = path.join(userDir, uploadFile.filename)
+
+    CHUNK_SIZE = 1024
+    with open(fileDir, 'wb') as buffer:
+        while contents := uploadFile.file.read(CHUNK_SIZE):
+            buffer.write(contents)
+        uploadFile.file.close()
+
+# with를 함께 사용한다면 파일 입출력 단계에서 해당 파일을 위해 openk close를 해주어야하는데 
+# "with open('C:/pythonTest/abc.txt', 'r') as file_data" 를 한다면 with가 자동으로 close를 불러와준다.

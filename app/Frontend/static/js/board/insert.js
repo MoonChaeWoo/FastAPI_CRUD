@@ -23,9 +23,12 @@ $contentForm.submit((evt) => {
         data : formData,
         processData : false,
         contentType : false,
-        success : function(result){
-            alert('success!')
+        success : () => {
+            alert('Upload was successful!');
         },
+        error : () => {
+            alert('Upload failed');
+        }
     });
 
     // processData  : false

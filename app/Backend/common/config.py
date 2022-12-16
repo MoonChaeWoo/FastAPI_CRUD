@@ -19,6 +19,8 @@ class Config:
     TEMPLATES = path.join(FRONTEND, 'templates')
     BOARD = path.join(TEMPLATES, 'board')
     DASHBOARD = path.join(TEMPLATES, 'dashboard')
+    UPLOAD = path.join(FRONTEND, 'upload')
+
     
 # Timeout 최대값
 # template.yaml 파일에서 Timeout 값을 3600 으로 수정한 후, 배포 명령어 실행함.
