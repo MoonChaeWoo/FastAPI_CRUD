@@ -14,8 +14,7 @@ $contentForm.submit((evt) => {
 
     formData.append('title', $boardTitle.val());
     formData.append('description', $boardContent.val());
-    formData.append('uploadFile', $('#board_file')[0].files[0]);
-
+    if($('#board_file')[0].files[0] !== undefined) formData.append('uploadFile', $('#board_file')[0].files[0]);
 
     $.ajax({
         type : 'post',

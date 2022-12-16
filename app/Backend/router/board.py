@@ -57,13 +57,16 @@ def index(request : Request, access_token : str | None = Cookie(default=None), d
 async def index(request : Request, form_data : schemas.ItemCreate = Depends(schemas.ItemCreate.as_form), access_token : str | None = Cookie(default=None), db : Session = Depends(get_db)):
     # access_token : str | None = Cookie(default=None)
     # 쿠키를 받아오려면 웹에 저장된 쿠키의 이름과 파라미터의 이름을 동일 시 해야만 값이 불러와진다.
-
     user_email = token_ckeck(access_token, db)
-    save_upload_file(form_data.uploadFile, user_email)
-    # UploadFile안의 속성
-    # 1. filename
-    # 2. content_type
-    # 3. file
+
+    if form_data.uploadFile != None:
+        save_upload_file(form_data.uploadFile, user_email)
+        # UploadFile안의 속성
+        # 1. filename
+        # 2. content_type
+        # 3. file
+    else:
+        pass
 
     context = {
         'request' : request,

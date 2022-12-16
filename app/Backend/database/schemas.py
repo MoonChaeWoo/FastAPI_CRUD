@@ -4,7 +4,7 @@
 # FastAPI의 스키마는 pydantic model에 종속돼있다. 
 
 from typing import List
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from fastapi import Form, File, UploadFile
 
 # item 스키마
@@ -16,7 +16,7 @@ class ItemCreate(ItemBase):
     uploadFile : UploadFile | None = None
 
     @classmethod
-    def as_form(cls, title : str = Form(...), description : str = Form(...), uploadFile : UploadFile = File(...)):
+    def as_form(cls, title : str = Form(...), description : str = Form(...), uploadFile : UploadFile | None = None):
         return cls(title = title, description = description, uploadFile = uploadFile)
 
 class ItemUpdate(ItemCreate):
