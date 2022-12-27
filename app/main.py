@@ -8,7 +8,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from Backend.database import models
 from Backend.database.conn import engin
-from Backend.router import board, items, users, dashboard, login
+from Backend.router import board, items, users, dashboard, login, pyScript
 import time
 from jose import JWTError, jwt
 from Backend.router.login import SECRET_KEY
@@ -52,6 +52,7 @@ def create_app():
 
 
     # 라우터 정의
+    app.include_router(pyScript.router)
     app.include_router(board.router)
     app.include_router(users.router)
     app.include_router(items.router)

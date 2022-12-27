@@ -19,6 +19,7 @@ class Config:
     TEMPLATES = path.join(FRONTEND, 'templates')
     BOARD = path.join(TEMPLATES, 'board')
     DASHBOARD = path.join(TEMPLATES, 'dashboard')
+    PYSCRIPT = path.join(TEMPLATES, 'pyScript')
     UPLOAD = path.join(FRONTEND, 'upload')
 
     

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://pyscript.net/latest/pyscript.css" />
+    <script defer src="https://pyscript.net/latest/pyscript.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <p>오늘 날짜는 <label id="today"></label></p>
+    <p>오늘 날짜는 <label class="today"></label></p>
+
+    <script src="{{ url_for('static', path='/pyscript/python.py') }}"></script>
+    <py-script>
+        import datetime as dt
+
+        # pyscript.write('today', dt.date.today().strftime('%Y년%m월%d일'))
+
+        Element('today').element.innerText = dt.date.today().strftime('%Y년%m월%d일')
+        
+    </py-script>|
+</body>
+</html>
+
+
+<!-- # html ID "input_text"와 "output_text" 와 연결된 객체 생성
+      input_text = Element("input_text")
+      output_text = Element("output_text") 
+    
+      <h1 id = "output_text"></h1>
+    -->
