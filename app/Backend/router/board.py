@@ -108,6 +108,14 @@ def index(request : Request, post_id: int, access_token : str | None = Cookie(de
     }
     return board.TemplateResponse('post.html', context)
 
+@router.post("/board/delete", response_class=HTMLResponse, tags=["board"])
+def update_user(request : Request, form_data : schemas.ItemDelete = Depends(schemas.ItemDelete.as_form), db : Session = Depends(get_db)):
+    item = items_crud.delete_user_item(db, form_data.id)
+    context = {
+        'request' : request,
+    }
+    return board.TemplateResponse('board_main.html', context)
+
     # 토큰이 유무 체크 
 def token_ckeck(value, db):
     try:

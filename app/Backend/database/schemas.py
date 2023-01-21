@@ -20,7 +20,14 @@ class ItemCreate(ItemBase):
         return cls(title = title, description = description, uploadFile = uploadFile)
 
 class ItemUpdate(ItemCreate):
-    id : int 
+    id : int
+
+class ItemDelete(BaseModel):
+    id : int
+
+    @classmethod
+    def as_form(cls, id : int = Form(...)):
+        return cls(id = id)
 
 class Item(ItemBase):
     id : int

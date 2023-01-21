@@ -24,6 +24,7 @@ $contentForm.submit((evt) => {
         contentType : false,
         success : () => {
             alert('Upload was successful!');
+            window.location.replace('/board');
         },
         error : () => {
             alert('Upload failed');

@@ -23,7 +23,6 @@ class User(Base):
     name = Column(String(20), nullable=False)
     email = Column(String(50), unique=True, index=True)
     hashed_password = Column(String(60))
-
     is_active = Column(Boolean, default=True)
 
     # relationship은 관계를 위해 SQLAlchemy ORM에서 제공하는 것을 사용 한다.
